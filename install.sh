@@ -124,14 +124,18 @@ _${TOOL_NAME}_completions() {
 complete -F _${TOOL_NAME}_completions ${TOOL_NAME}
 EOF
 
-# 6. Add alias to .bashrc
-ALIAS_LINE="alias $TOOL_NAME='$TARGET_SCRIPT'"
-if grep -q "alias $TOOL_NAME=" "$BASHRC"; then
-    echo -e "${YELLOW}Alias '$TOOL_NAME' already exists. Updating...${NC}"
-    sed -i "s|alias $TOOL_NAME=.*|$ALIAS_LINE|" "$BASHRC"
+# 6. Add wrapper function to .bashrc
+# Remove old alias if it exists
+sed -i "/alias $TOOL_NAME=/d" "$BASHRC"
+
+WRAPPER_FUNC="${TOOL_NAME}() { \"$TARGET_SCRIPT\" \"\$@\"; if [[ ! -f \"$TARGET_SCRIPT\" ]]; then unset -f ${TOOL_NAME} _${TOOL_NAME}_completions 2>/dev/null; complete -r ${TOOL_NAME} 2>/dev/null; fi; }"
+
+if grep -q "^${TOOL_NAME}() {" "$BASHRC"; then
+    echo -e "${YELLOW}Wrapper '$TOOL_NAME' already exists. Updating...${NC}"
+    sed -i "s|^${TOOL_NAME}() {.*|$WRAPPER_FUNC|" "$BASHRC"
 else
-    echo "Adding alias to .bashrc..."
-    echo -e "\n# ${TOOL_NAME} - Git Identity Manager\n$ALIAS_LINE" >> "$BASHRC"
+    echo "Adding wrapper to .bashrc..."
+    echo -e "\n# ${TOOL_NAME} - Git Identity Manager\n$WRAPPER_FUNC" >> "$BASHRC"
 fi
 
 # 7. Add completion source to .bashrc

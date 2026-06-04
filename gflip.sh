@@ -197,9 +197,12 @@ uninstall() {
     [[ "$confirm" != "y" && "$confirm" != "Y" ]] && echo "Aborted." && return
 
     rm -rf "$CONFIG_DIR"
-    sed -i "/alias $TOOL_NAME=/d" "$HOME/.bashrc"
-    sed -i "/$TOOL_NAME\/completion/d" "$HOME/.bashrc"
-    echo -e "${GREEN}Uninstalled ${TOOL_NAME}. Run: source ~/.bashrc${NC}"
+    sed -i "/# ${TOOL_NAME} - Git Identity Manager/d" "$HOME/.bashrc"
+    sed -i "/alias ${TOOL_NAME}=/d" "$HOME/.bashrc"
+    sed -i "/^${TOOL_NAME}() {/d" "$HOME/.bashrc"
+    sed -i "/\.${TOOL_NAME}\/completion/d" "$HOME/.bashrc"
+    
+    echo -e "${GREEN}Successfully uninstalled ${TOOL_NAME}!${NC}"
 }
 
 # --- Execution ---
