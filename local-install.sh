@@ -21,18 +21,9 @@ NC='\033[0m'
 
 echo -e "${BLUE}Starting Git-Flip (${TOOL_NAME}) installation...${NC}"
 
-# 1. Clone repository to temporary directory
-TEMP_DIR="/tmp/gflip.git"
-echo -e "Cloning repository to $TEMP_DIR..."
-rm -rf "$TEMP_DIR"
-if ! git clone https://github.com/ananay-nag/gflip.git "$TEMP_DIR" -q; then
-    echo -e "${RED}Error: Failed to clone repository!${NC}"
-    exit 1
-fi
-
-if [[ ! -f "$TEMP_DIR/$SOURCE_SCRIPT" ]]; then
-    echo -e "${RED}Error: '$SOURCE_SCRIPT' not found in cloned repository!${NC}"
-    rm -rf "$TEMP_DIR"
+# 1. Check if source script exists
+if [[ ! -f "$SOURCE_SCRIPT" ]]; then
+    echo -e "${RED}Error: '$SOURCE_SCRIPT' not found in current directory!${NC}"
     exit 1
 fi
 
@@ -50,7 +41,7 @@ fi
 
 # 4. Copy script to target
 echo "Installing script to $TARGET_SCRIPT..."
-cp "$TEMP_DIR/$SOURCE_SCRIPT" "$TARGET_SCRIPT"
+cp "$SOURCE_SCRIPT" "$TARGET_SCRIPT"
 chmod +x "$TARGET_SCRIPT"
 
 # 5. Write tab-completion script
@@ -142,10 +133,6 @@ else
     echo "Adding tab-completion to .bashrc..."
     echo -e "$COMPLETION_LINE" >> "$BASHRC"
 fi
-
-# 8. Clean up
-echo "Cleaning up temporary repository..."
-rm -rf "$TEMP_DIR"
 
 echo ""
 echo -e "${GREEN}Installation complete!${NC}"

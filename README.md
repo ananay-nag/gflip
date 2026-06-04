@@ -16,14 +16,10 @@ If you work with multiple identities (e.g., personal, work, open-source) and kee
 
 ## 🛠️ Installation
 
-Git-Flip comes with an automated installation script. 
-
-1. Clone or download this repository.
-2. Run the `install.sh` script:
+You can install Git-Flip directly by running:
 
 ```bash
-chmod +x install.sh
-./install.sh
+curl -fsSL https://raw.githubusercontent.com/ananay-nag/gflip/refs/heads/main/install.sh | bash
 ```
 
 The installer will:
@@ -32,7 +28,7 @@ The installer will:
 - Set up bash tab-completion.
 - Add the `gflip` alias to your `~/.bashrc`.
 
-3. After installation, reload your bash profile to activate:
+After installation, reload your bash profile to activate:
 
 ```bash
 source ~/.bashrc
